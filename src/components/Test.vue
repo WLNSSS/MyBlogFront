@@ -1,0 +1,77 @@
+<template>
+<div>
+    <Row>
+        <Col span="8" offset="8"> 
+        <Card style="width:350px; margin-top:30%;margin-left:25%">
+        <p slot="title" style="color:#2d8cf0; text-align:center;font-size:18px">
+            <Icon type="logo-octocat" size="18" />
+            Login
+        </p>
+         <div><Input v-model="account" placeholder="Enter your account..." style="width: 100%" /></div>
+         <br/>
+         <div style="top:10px"><Input v-model="password" placeholder="Enter your password..." style="width: 100%" /></div>
+         <br/>
+         <div style="top:10px">
+         <Input v-model="validCode" placeholder="Enter your valid number..." style="width: 60%;margin-top:-25px" />
+         <img id="img" alt="验证码" onclick="this.src='/createImageCode?d='+new Date()*1" src="http://localhost:8080/createImageCode" style="width: 38%;"/>
+         </div>
+         <br/>
+         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="test">Go!</Button></div>
+         <br/>
+         <p style="text-align:center;">OR</p>
+         <br/>
+         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="test">Go to register!</Button></div>
+    </Card>
+    </Col>
+        <Col span="8"></Col>
+    </Row>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'test',
+    data () {
+        return {
+                account: '',
+                password:'',
+                validCode:'',
+            }
+    },
+    methods:{
+        // test: function(){
+        //     var map = {account:this.account,password:this.password};
+        //     // fetch方式实现跨域
+        //     fetch("/api/hello",{
+        //     method:"POST",
+        //     body:map,
+        //     }).then(res => {
+        //     console.log(res)
+        //     })
+        //             }
+        test: function(){
+        var that = this;
+        this.$axios({
+            url: 'http://localhost:8080/hello',
+            method: 'post',
+            responseType: 'json', // 默认的
+            data: {
+                account:this.account,
+                password:this.password,
+            }
+        }).then(function (response) {
+            console.log(response);
+            console.log(response.data);
+            that.$router.push({path:'/BlogIndex'});
+        }).catch(function (error) {
+            console.log(error);
+        })
+        }
+    }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
