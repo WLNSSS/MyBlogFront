@@ -44,11 +44,11 @@ export default {
     data () {
         return {
                 userName:'',
-                userNameDemand:'输入字符，不超过5个字符',
+                userNameDemand:'输入字符，3-10个字符',
                 account: '',
-                accountDemand:'输入任意数字，不超过10个数字',
+                accountDemand:'输入任意数字，5-10个数字',
                 password:'',
-                passwordDemand:'输入任意数字+字母，不超过10个数字',
+                passwordDemand:'输入任意数字+字母，应为5-10位',
                 moblieNumber:'',
                 messageNumber:'',
                 validCode:'',
@@ -151,7 +151,7 @@ export default {
                 }).then(function (response) {
                     console.log(response.data);
                     
-                    if(response.data.errorInfo != null){
+                    if(response.data.errorInfo.length == 0){
                         var errorInfo = response.data.errorInfo;
                         for (var i = 0; i < errorInfo.length; i++) {
                             that.$Notice.error({
@@ -180,8 +180,8 @@ export default {
         vaildInput: function(){
             var errorMessage = new Array();
             var arrIndex = 0;
-            if(this.userName.length > 10){
-                errorMessage[arrIndex] = '用户名过长！';
+            if(this.userName.length > 10 || this.userName.length < 3){
+                errorMessage[arrIndex] = '用户名应为3-10个字符！';
                 arrIndex++;
             }
             if(this.userName == ""){
@@ -192,8 +192,8 @@ export default {
                 errorMessage[arrIndex] = "账号不能为空!";
                 arrIndex++;
             }
-            if(this.account.length > 10){
-                errorMessage[arrIndex] = "账号过长！";
+            if(this.account.length > 10 || this.account.length < 5){
+                errorMessage[arrIndex] = "账号应为5-10个数字！";
                 arrIndex++;
             }
             var reg = /^[0-9]*$/;
@@ -205,8 +205,8 @@ export default {
                 errorMessage[arrIndex] = "密码不能为空!";
                 arrIndex++;
             }
-            if(this.password.length > 10){
-                errorMessage[arrIndex] = "密码过长！";
+            if(this.password.length > 10 || this.password.length < 5){
+                errorMessage[arrIndex] = "密码应为5-10个字母或数字！";
                 arrIndex++;
             }
             var reg = /^[A-Za-z0-9]+$/;

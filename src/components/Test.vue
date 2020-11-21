@@ -52,17 +52,27 @@ export default {
         test: function(){
         var that = this;
         this.$axios({
-            url: 'http://localhost:8080/hello',
+            headers: {
+            'Access-Control-Allow-Origin':'*'
+            },
+            url: 'http://localhost:8080/login',
             method: 'post',
             responseType: 'json', // 默认的
             data: {
                 account:this.account,
                 password:this.password,
+                validCode:this.validCode
             }
         }).then(function (response) {
-            console.log(response);
-            console.log(response.data);
-            that.$router.push({path:'/BlogIndex'});
+            if(response.data.errorInfo != null){
+                var errorInfo = response.data.errorInfo;
+                that.$Notice.error({
+                    title: '错误',
+                    desc:  errorInfo
+                });
+            }else{
+                that.$router.push({path:'/BlogIndex'});
+            }
         }).catch(function (error) {
             console.log(error);
         })

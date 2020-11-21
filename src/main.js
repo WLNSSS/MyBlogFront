@@ -9,6 +9,7 @@ import axios from 'axios';
 import Qs from "qs"
 Vue.prototype.qs = Qs;　
 
+axios.defaults.withCredentials=true
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false
 Vue.use(iView); 
