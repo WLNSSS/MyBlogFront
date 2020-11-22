@@ -48,7 +48,7 @@ export default {
                 language_url: '/static/tinymce/langs/zh_CN.js',
                 language: 'zh_CN',
                 skin_url: '/static/tinymce/skins/ui/oxide', // skin路径
-                height: 300, // 编辑器高度
+                height: 600, // 编辑器高度
                 branding: false, // 是否禁用“Powered by TinyMCE”
                 menubar: true, // 顶部菜单栏显示
                 plugins: this.plugins,
