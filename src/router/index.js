@@ -4,6 +4,8 @@ import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import BlogIndex from '@/components/BlogIndex'
 import Register from '@/components/Register'
+import NewPaper from '@/components/NewPaper'
+import tinymceEditor from '@/components/tinymceEditor'
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +29,16 @@ export default new Router({
       path: '/Register',
       name: 'Register',
       component: Register
-    }
+    },
+    {
+      path: '/NewPaper',
+      name: 'NewPaper',
+      component: NewPaper
+    },
+    {
+      path: '/tinymceEditor',
+      name: 'tinymceEditor',
+      component: tinymceEditor
+    },
   ]
 })
