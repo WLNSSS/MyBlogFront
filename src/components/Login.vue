@@ -16,11 +16,11 @@
          <img id="img" alt="验证码" onclick="this.src='/createImageCode?d='+new Date()*1" src="http://localhost:8080/createImageCode" style="width: 38%;"/>
          </div>
          <br/>
-         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="test">Go!</Button></div>
+         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="login">Go!</Button></div>
          <br/>
          <p style="text-align:center;">OR</p>
          <br/>
-         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="test">Go to register!</Button></div>
+         <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="goRegister">Go to register!</Button></div>
     </Card>
     </Col>
         <Col span="8"></Col>
@@ -49,7 +49,7 @@ export default {
         //     console.log(res)
         //     })
         //             }
-        test: function(){
+        login: function(){
         var that = this;
         this.$axios({
             headers: {
@@ -76,6 +76,9 @@ export default {
         }).catch(function (error) {
             console.log(error);
         })
+        },
+        goRegister:function(){
+            that.$router.push({path:'/Register'});
         }
     }
 }

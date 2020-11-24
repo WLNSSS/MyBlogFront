@@ -5,17 +5,23 @@
         <Row class="row-style">
             <Col span="12" offset="6">
             <div class="upload-label">
-                <label class="upload-label">
                     <div class="upload-label-div">
-                        <div class="upload-label-div-div">+ 上传题图</div>
+                        <Upload
+                            multiple
+                            type="drag"
+                            action="http://localhost:8080/upload">
+                            <div style="padding: 20px 0">
+                                <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+                                <p>上传题图</p>
+                            </div>
+                        </Upload>
                     </div>
-                </label>
             </div>
             </Col>
         </Row>
         <Row class="row-style"> 
             <Col span="12" offset="6">
-            <Input v-model="value16" maxlength="10" show-word-limit placeholder="请输入标题" style="width: 100%;" size="large"/>
+            <Input v-model="title" maxlength="10" show-word-limit placeholder="请输入标题" style="width: 100%;" size="large"/>
             </Col>
         </Row>
         <Row class="row-style">
@@ -35,6 +41,7 @@ import TinymceEditor from '@/components/tinymceEditor'
             return {
                 userName:'wlnsss',
                 value:'',
+                title:'',
                 init: {
                     language_url: '/static/tinymce/langs/zh_CN.js',//语言包的路径
                     language: 'zh_CN',//语言
@@ -45,6 +52,46 @@ import TinymceEditor from '@/components/tinymceEditor'
                 }
             }
         },
+        methods:{
+            verifyFile: (file) => {
+                if (file == null) {
+                    alert('请上传图片！');
+                    return false;
+                }
+                let img_regexp = /^image\/\w+/g;
+                if (!img_regexp.test(file.type)) {
+                    alert('上传的不是图片，请重新选择！');
+                    return false;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('上传的图片大于5MB，请重新选择！');
+                    return false;
+                }
+                return true;
+            },
+            goUpload: () => {
+                let file = document.querySelector('input[type=file]').files[0];
+                //if(!app.verifyFile(file)){
+                //    return;
+                //}
+
+                let formData = new window.FormData();
+                formData.append('file', file);
+                axios({
+                    method: "POST",
+                    url: "/upload",
+                    headers: {
+                        'Content-Type': 'multipart/form-data' //注意这里
+                    },
+                    data: formData
+                }).then((res) => {
+                    //这里返回保存的文件名
+                    app.saveFileName = res.data;
+                }).catch((err) => {
+                    console.log(err)
+                });
+            }
+        }
     }
 </script>
 <style scoped>
@@ -86,7 +133,7 @@ import TinymceEditor from '@/components/tinymceEditor'
     .upload-label-div{
         width:18%;
         margin-left:40%;
-        padding-top:15%;
+        padding-top:10%;
     }
     .upload-label-div-div{
         border-style:dotted;
