@@ -13,7 +13,7 @@
          <br/>
          <div style="top:10px">
          <Input v-model="validCode" placeholder="Enter your valid number..." style="width: 60%;margin-top:-25px" />
-         <img id="img" alt="验证码" onclick="this.src='/createImageCode?d='+new Date()*1" src="http://localhost:8080/createImageCode" style="width: 38%;"/>
+         <img id="img" alt="验证码" onclick="this.src='http://localhost:8080/createImageCode?d='+new Date()*1" :src="src" style="width: 38%;"/>
          </div>
          <br/>
          <div style="top:10px"><Button type="success" style="top:20px;width:100%" @click.native.prevent="login">Go!</Button></div>
@@ -36,6 +36,7 @@ export default {
                 account: '',
                 password:'',
                 validCode:'',
+                src:'http://localhost:8080/createImageCode'
             }
     },
     methods:{
@@ -61,7 +62,7 @@ export default {
             data: {
                 account:this.account,
                 password:this.password,
-                validCode:this.validCode
+                validCode:this.validCode,
             }
         }).then(function (response) {
             if(response.data.errorInfo != null){
@@ -78,6 +79,7 @@ export default {
         })
         },
         goRegister:function(){
+            var that = this;
             that.$router.push({path:'/Register'});
         }
     }

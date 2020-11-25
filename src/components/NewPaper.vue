@@ -5,10 +5,12 @@
         <Row class="row-style">
             <Col span="12" offset="6">
             <div class="upload-label">
-                    <div class="upload-label-div">
+                    <div class="upload-label-div" v-if="uploadState">
                         <Upload
                             multiple
                             type="drag"
+                            :format="['jpg','jpeg','png']"
+                            :on-success="handleSuccess"
                             action="http://localhost:8080/upload">
                             <div style="padding: 20px 0">
                                 <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
@@ -16,6 +18,7 @@
                             </div>
                         </Upload>
                     </div>
+                    <img :src="saveFileName" v-if="imgState" width="100%" />
             </div>
             </Col>
         </Row>
@@ -26,7 +29,12 @@
         </Row>
         <Row class="row-style">
             <Col span="12" offset="6">
-            <TinymceEditor ref="editor" :value="msg" @onClick="onClick" ></TinymceEditor>
+            <TinymceEditor ref="editor" v-model="paperText" @onClick="onClick" ></TinymceEditor>
+            </Col>
+        </Row>
+        <Row class="row-style">
+            <Col span="12" offset="6">
+            <Button type="primary" style="width:100%;margin-top:10px" @click="savePaper">提交</Button>
             </Col>
         </Row>
     </div>
@@ -42,6 +50,10 @@ import TinymceEditor from '@/components/tinymceEditor'
                 userName:'wlnsss',
                 value:'',
                 title:'',
+                paperText:'',
+                uploadState:true,
+                imgState:false,
+                saveFileName:'',
                 init: {
                     language_url: '/static/tinymce/langs/zh_CN.js',//语言包的路径
                     language: 'zh_CN',//语言
@@ -69,7 +81,41 @@ import TinymceEditor from '@/components/tinymceEditor'
                 }
                 return true;
             },
+            handleSuccess:function(response, file, fileList){
+                //这里返回保存的文件名
+                    this.saveFileName = response;
+                    this.imgState = true;
+                    this.uploadState = false;
+            },
+            savePaper:function(){
+                this.$axios({
+                    headers: {
+                    'Access-Control-Allow-Origin':'*'
+                    },
+                    url: 'http://localhost:8080/saveNewpaper',
+                    method: 'post',
+                    responseType: 'json', // 默认的
+                    data: {
+                        paperPicture:this.saveFileName,
+                        paperTitle:this.title,
+                        paperText:this.paperText,
+                    }
+                }).then(function (response) {
+                    if(response.data.errorInfo != null){
+                        var errorInfo = response.data.errorInfo;
+                        that.$Notice.error({
+                            title: '错误',
+                            desc:  errorInfo
+                        });
+                    }else{
+                        that.$router.push({path:'/BlogIndex'});
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+            },
             goUpload: () => {
+                var that = this;
                 let file = document.querySelector('input[type=file]').files[0];
                 //if(!app.verifyFile(file)){
                 //    return;
@@ -86,7 +132,9 @@ import TinymceEditor from '@/components/tinymceEditor'
                     data: formData
                 }).then((res) => {
                     //这里返回保存的文件名
-                    app.saveFileName = res.data;
+                    that.saveFileName = res.data;
+                    that.imgState = true;
+                    that.uploadState = false;
                 }).catch((err) => {
                     console.log(err)
                 });

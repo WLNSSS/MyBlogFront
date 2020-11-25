@@ -21,7 +21,7 @@
         </Col>
         <Col span="1" offset="3">
             <Badge class="notifications">
-                <Icon type="ios-document-outline" size="26"/>
+                <Icon type="ios-document-outline" @click.native.prevent="goNewpaper" size="26"/>
             </Badge>
             <Badge dot class="notifications">
                 <Icon type="ios-notifications-outline" size="26"></Icon>
@@ -52,6 +52,12 @@
                 userName:'wlnsss',
             }
         },
+        methods:{
+            goNewpaper:function(){
+            var that = this;
+            that.$router.push({path:'/Newpaper'});
+        }
+        }
     }
 </script>
 <style scoped>
