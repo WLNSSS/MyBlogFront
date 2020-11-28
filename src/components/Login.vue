@@ -9,7 +9,7 @@
         </p>
          <div><Input v-model="account" placeholder="Enter your account..." style="width: 100%" /></div>
          <br/>
-         <div style="top:10px"><Input v-model="password" placeholder="Enter your password..." style="width: 100%" /></div>
+         <div style="top:10px"><Input type="password" v-model="password" placeholder="Enter your password..." style="width: 100%" /></div>
          <br/>
          <div style="top:10px">
          <Input v-model="validCode" placeholder="Enter your valid number..." style="width: 60%;margin-top:-25px" />

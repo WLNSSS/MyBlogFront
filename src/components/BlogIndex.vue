@@ -49,7 +49,8 @@
             <List item-layout="vertical" border>  
                 <ListItem v-for="item in data" :key="item.title">
                     <ListItemMeta :title="item.title" />
-                    {{ item.content }}
+                    <!-- {{  }} -->
+                    <div v-html="item.content"></div>
                     <template slot="action">
                         <li>
                             <Icon type="md-paper-plane" />发布于：{{item.publishTime}}
@@ -103,6 +104,49 @@ import blogHeader from "@/components/Header"
                 ]
             }
         },
+        created:function(){
+            var that = this;
+                this.$axios({
+                    headers: {
+                    'Access-Control-Allow-Origin':'*'
+                    },
+                    url: 'http://localhost:8080/searchSimplyPaper',
+                    method: 'post',
+                    responseType: 'json', // 默认的
+                    data: {
+                    }
+                }).then(function (response) {
+                    if(response.data.errorInfo != null){
+                        var errorInfo = response.data.errorInfo;
+                        that.$Notice.error({
+                            title: '错误',
+                            desc:  errorInfo
+                        });
+                    }else{
+                        var paperArr = new Array();
+                        var returnData = response.data.returnData;
+                        for(var i = 0;i < returnData.length;i++){
+                            var property = new Object();
+                            property.title = returnData[i].papertitle;
+                            property.id = returnData[i].id;
+                            property.avatar = returnData[i].paperPicture;
+                            property.content = returnData[i].paperText;
+                            property.publishTime = that.secondsFormat(returnData[i].time);
+                            paperArr.push(property);
+                        }
+                        that.data = paperArr;
+                        
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                })
+        },
+        methods:{
+             secondsFormat : function(sec){
+                var mydate=new Date(sec);
+                return mydate.getFullYear() + "年-" + (mydate.getMonth()+1) + "月-" + mydate.getDate() + '日';
+            }
+        }
     }
 </script>
 <style scoped>

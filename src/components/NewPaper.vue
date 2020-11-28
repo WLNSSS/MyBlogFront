@@ -88,6 +88,7 @@ import TinymceEditor from '@/components/tinymceEditor'
                     this.uploadState = false;
             },
             savePaper:function(){
+                var that = this;
                 this.$axios({
                     headers: {
                     'Access-Control-Allow-Origin':'*'
